@@ -9,6 +9,7 @@ import {
 } from "./styles";
 import { BodyOne } from "../BodyOne/BodyOne";
 import { BodyTwo } from "../BodyTwo/BodyTwo";
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "../Carousel"; //
 import { BodyThree } from "../BodyThree/BodyThree";
 
 export function HeroMid() {
@@ -47,6 +48,22 @@ export function HeroMid() {
       <BodyOne />
       <BodyTwo />
       <BodyThree />
+       <Carousel className="relative w-full max-w-3xl mx-auto mt-10">
+        <CarouselPrevious />
+        <CarouselNext />
+
+        <CarouselContent>
+          <CarouselItem className="bg-red-400 h-40 flex items-center justify-center">
+            Slide 1
+          </CarouselItem>
+          <CarouselItem className="bg-blue-400 h-40 flex items-center justify-center">
+            Slide 2
+          </CarouselItem>
+          <CarouselItem className="bg-green-400 h-40 flex items-center justify-center">
+            Slide 3
+          </CarouselItem>
+        </CarouselContent>
+      </Carousel>
     </MainDiv>
   );
 }

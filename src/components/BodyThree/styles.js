@@ -1,11 +1,13 @@
 import styled from "styled-components";
 import { pxParaVh, pxParaVw, pxParaClamp } from "../../responsive";
+// import { ReactComponent as SnakeSvg } from "../../assets/icons/snake-bar.svg";
 
 export const MainDiv = styled.div`
   min-height: ${pxParaVh(500)};
   width: 100%;
   display: flex;
   flex-direction: column;
+  padding-bottom: ${pxParaVh(174)};
   `
 
 export const BorderTop = styled.div`
@@ -13,6 +15,11 @@ export const BorderTop = styled.div`
   height: ${pxParaVh(1)};
   background: #403F3F;
 `
+// export const BorderBottom = styled.div`
+//   width: 100%;
+//   height: ${pxParaVh(1)};
+//   background: #403F3F;
+// `
 
 export const HeaderDiv = styled.div`
   /* display: flex;
@@ -74,6 +81,7 @@ export const LeftTextDiv = styled.div`
 
 
 export const IconsDiv = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -81,20 +89,34 @@ export const IconsDiv = styled.div`
   gap: ${pxParaVh(36)};
 
  & > div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: ${pxParaVw(152)};
-  height: ${pxParaVw(152)};
-  border-radius: 50%;
-  background: #2D2D2D;
-
+    display: flex;
+    position: relative;;
+    justify-content: center;
+    align-items: center;
+    width: ${pxParaVw(152)};
+    height: ${pxParaVw(152)};
+    border-radius: 50%;
+    background: #2D2D2D;
+    z-index: 2;
+  
   & > svg {
     width: ${pxParaVw(70)};
   }
 }
 
 `;
+
+
+// export const SnakeSvgStyled = styled(SnakeSvg)`
+//   position: absolute;
+//   top: -${pxParaVh(50)};  // ajusta pra ficar visível acima
+//   left: 50%;
+//   transform: translateX(-50%);
+//   height: ${pxParaVh(50)}; // define altura fixa
+//   width: auto;
+//   z-index: 0;
+//   pointer-events: none;
+// `;
 
 export const RightTextDiv = styled.div`
   display: flex;

@@ -1,196 +1,93 @@
-import * as React from "react";
-import useEmblaCarousel from "embla-carousel-react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import '../../../src/global.css'
+import { BorderTop, DivCarousel, DivItens, DivTitulo, IconesDiv, MainContainer } from "./styles";
+import AnthropicIcon from "../../assets/icons-empresa-svg/anthropic-icon";
+import AwsIcon from "../../assets/icons-empresa-svg/aws-icon";
+import FigmaIcon from "../../assets/icons-empresa-svg/buble-icon";
+import FireBaseIcon from "../../assets/icons-empresa-svg/devIcon-icon";
+import DockerIcon from "../../assets/icons-empresa-svg/docker-icon";
+import ExpoIcon from "../../assets/icons-empresa-svg/expo-icon";
+import GitHubIcon from "../../assets/icons-empresa-svg/github-icon";
+import JavaScriptIcon from "../../assets/icons-empresa-svg/javascript-icon";
+import QdrantIcon from "../../assets/icons-empresa-svg/losangulo";
+import MongoDbIcon from "../../assets/icons-empresa-svg/mongodb-icon";
+import OpenAiIcon from "../../assets/icons-empresa-svg/openai-icon";
+import PhytonIcon from "../../assets/icons-empresa-svg/phyton-icon";
+import PineConeIcon from "../../assets/icons-empresa-svg/pineCone-icon";
+import PostgresIcon from "../../assets/icons-empresa-svg/postgresql-icon";
+import PostManIcon from "../../assets/icons-empresa-svg/postman-icon";
+import ReactIcon from "../../assets/icons-empresa-svg/react-icon";
+import RenderIcon from "../../assets/icons-empresa-svg/render-icon";
+import RustIcon from "../../assets/icons-empresa-svg/rust-icon";
+import SurrealIcon from "../../assets/icons-empresa-svg/surrealDb-icon";
+import { useEffect, useRef } from "react";
 
-// import { cn } from "@/lib/utils";
-import { cn } from "../../lib/utils";
-import { Button } from "../Button/Button";
 
-const CarouselContext = React.createContext(null);
 
-function useCarousel() {
-  const context = React.useContext(CarouselContext);
-  if (!context) throw new Error("useCarousel must be used within a <Carousel />");
-  return context;
+
+export function Carousel () {
+
+  const carouselRef = useRef(null);
+
+  const icons = [
+    { id: 1, element: <AnthropicIcon />, alt: "Anthropic"},
+    { id: 2, element: <AwsIcon/>, alt: "ASW"},
+    { id: 3, element: <FigmaIcon/>, alt: "Figma"},
+    { id: 4, element: <FireBaseIcon/>, alt: "FireBase"},
+    { id: 5, element: <DockerIcon/>, alt: "Docker"},
+    { id: 6, element: <ExpoIcon/>, alt: "Expo"},
+    { id: 7, element: <GitHubIcon/>, alt: "GitHub"},
+    { id: 8, element: <JavaScriptIcon/>, alt: "JavaScript"},
+    { id: 9, element: <QdrantIcon/>, alt: "Qdrant"},
+    { id: 10, element: <MongoDbIcon/>, alt: "MongoDB"},
+    { id: 11, element: <OpenAiIcon/>, alt: "OpenAI"},
+    { id: 12, element: <PhytonIcon/>, alt: "Python"},
+    { id: 13, element: <PineConeIcon/>, alt: "PineCone"},
+    { id: 14, element: <PostgresIcon/>, alt: "Postgres"},
+    { id: 15, element: <PostManIcon/>, alt: "PostMan"},
+    { id: 16, element: <ReactIcon/>, alt: "React"},
+    { id: 17, element: <RenderIcon/>, alt: "Render"},
+    { id: 18, element: <RustIcon/>, alt: "Rust"},
+    { id: 19, element: <SurrealIcon/>, alt: "Surreal"},
+  ];
+
+const loopIcons = [...icons, ...icons];
+
+useEffect(() => {
+  const carousel = carouselRef.current;
+  if (!carousel) return;
+
+  let scrollStep = 0.5; // velocidade (quanto maior, mais rápido)
+  let animationFrameId;
+
+  const scroll = () => {
+    carousel.scrollLeft += scrollStep;
+
+    // quando chega ao meio (metade duplicada), volta pro início
+    if (carousel.scrollLeft >= carousel.scrollWidth / 2) {
+      carousel.scrollLeft = 0;
+    }
+
+    animationFrameId = requestAnimationFrame(scroll);
+  };
+
+  animationFrameId = requestAnimationFrame(scroll);
+
+  return () => cancelAnimationFrame(animationFrameId);
+}, []);
+
+
+  return (
+    <MainContainer>
+      <BorderTop/>
+      <DivItens>
+      <DivTitulo>
+        <h2>Tecnologias que usamos</h2>
+      </DivTitulo>
+     <DivCarousel ref={carouselRef}>
+          {loopIcons.map((i, index) => (
+            <IconesDiv key={index}>{i.element}</IconesDiv>
+          ))}
+        </DivCarousel>
+      </DivItens>
+    </MainContainer>
+  )
 }
-
-const Carousel = React.forwardRef(function Carousel(
-  { orientation = "horizontal", opts, setApi, plugins, className, children, ...props },
-  ref
-) {
-  const [carouselRef, api] = useEmblaCarousel(
-    { ...opts, axis: orientation === "horizontal" ? "x" : "y" },
-    plugins
-  );
-
-  const [canScrollPrev, setCanScrollPrev] = React.useState(false);
-  const [canScrollNext, setCanScrollNext] = React.useState(false);
-
-  const onSelect = React.useCallback((embla) => {
-    if (!embla) return;
-    setCanScrollPrev(embla.canScrollPrev());
-    setCanScrollNext(embla.canScrollNext());
-  }, []);
-
-  const scrollPrev = React.useCallback(() => api?.scrollPrev(), [api]);
-  const scrollNext = React.useCallback(() => api?.scrollNext(), [api]);
-
-  const handleKeyDown = React.useCallback(
-    (event) => {
-      if (event.key === "ArrowLeft") {
-        event.preventDefault();
-        scrollPrev();
-      } else if (event.key === "ArrowRight") {
-        event.preventDefault();
-        scrollNext();
-      }
-    },
-    [scrollPrev, scrollNext]
-  );
-
-  React.useEffect(() => {
-    if (!api || !setApi) return;
-    setApi(api);
-  }, [api, setApi]);
-
-  React.useEffect(() => {
-    if (!api) return;
-
-    onSelect(api);
-    api.on("reInit", onSelect);
-    api.on("select", onSelect);
-
-    return () => {
-      api.off("reInit", onSelect);
-      api.off("select", onSelect);
-    };
-  }, [api, onSelect]);
-
-  return (
-    <CarouselContext.Provider
-      value={{
-        carouselRef,
-        api,
-        opts,
-        orientation: orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
-        scrollPrev,
-        scrollNext,
-        canScrollPrev,
-        canScrollNext,
-      }}
-    >
-      <div
-        ref={ref}
-        onKeyDownCapture={handleKeyDown}
-        className={cn("relative", className)}
-        role="region"
-        aria-roledescription="carousel"
-        {...props}
-      >
-        {children}
-      </div>
-    </CarouselContext.Provider>
-  );
-});
-Carousel.displayName = "Carousel";
-
-const CarouselContent = React.forwardRef(function CarouselContent(
-  { className, ...props },
-  ref
-) {
-  const { carouselRef, orientation } = useCarousel();
-
-  return (
-    <div ref={carouselRef} className="overflow-hidden">
-      <div
-        ref={ref}
-        className={cn("flex", orientation === "horizontal" ? "-ml-4" : "-mt-4 flex-col", className)}
-        {...props}
-      />
-    </div>
-  );
-});
-CarouselContent.displayName = "CarouselContent";
-
-const CarouselItem = React.forwardRef(function CarouselItem(
-  { className, ...props },
-  ref
-) {
-  const { orientation } = useCarousel();
-
-  return (
-    <div
-      ref={ref}
-      role="group"
-      aria-roledescription="slide"
-      className={cn(
-        "min-w-0 shrink-0 grow-0 basis-full",
-        orientation === "horizontal" ? "pl-4" : "pt-4",
-        className
-      )}
-      {...props}
-    />
-  );
-});
-CarouselItem.displayName = "CarouselItem";
-
-const CarouselPrevious = React.forwardRef(function CarouselPrevious(
-  { className, variant = "outline", size = "icon", ...props },
-  ref
-) {
-  const { orientation, scrollPrev, canScrollPrev } = useCarousel();
-
-  return (
-    <Button
-      ref={ref}
-      variant={variant}
-      size={size}
-      className={cn(
-        "absolute  h-8 w-8 rounded-full",
-        orientation === "horizontal"
-          ? "-left-12 top-1/2 -translate-y-1/2"
-          : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
-        className
-      )}
-      disabled={!canScrollPrev}
-      onClick={scrollPrev}
-      {...props}
-    >
-      <ArrowLeft className="h-4 w-4" />
-      <span className="sr-only">Previous slide</span>
-    </Button>
-  );
-});
-CarouselPrevious.displayName = "CarouselPrevious";
-
-const CarouselNext = React.forwardRef(function CarouselNext(
-  { className, variant = "outline", size = "icon", ...props },
-  ref
-) {
-  const { orientation, scrollNext, canScrollNext } = useCarousel();
-
-  return (
-    <Button
-      ref={ref}
-      variant={variant}
-      size={size}
-      className={cn(
-        "absolute h-8 w-8 rounded-full",
-        orientation === "horizontal"
-          ? "-right-12 top-1/2 -translate-y-1/2"
-          : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
-        className
-      )}
-      disabled={!canScrollNext}
-      onClick={scrollNext}
-      {...props}
-    >
-      <ArrowRight className="h-4 w-4" />
-      <span className="sr-only">Next slide</span>
-    </Button>
-  );
-});
-CarouselNext.displayName = "CarouselNext";
-
-export { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext };

@@ -11,6 +11,7 @@ import { BodyOne } from "../BodyOne/BodyOne";
 import { BodyTwo } from "../BodyTwo/BodyTwo";
 import { Carousel} from "../Carousel/Carousel"; //
 import { BodyThree } from "../BodyThree/BodyThree";
+import { Form } from "../Form/Form";
 
 export function HeroMid() {
   const [produtoSelecionado, setProdutoSelecionado] = useState(0); // 0 até 3
@@ -49,6 +50,7 @@ export function HeroMid() {
       <BodyTwo />
       <BodyThree />
       <Carousel />
+      <Form />
     </MainDiv>
   );
 }

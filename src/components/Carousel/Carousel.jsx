@@ -1,4 +1,4 @@
-import { BorderTop, DivCarousel, DivItens, DivTitulo, IconesDiv, MainContainer } from "./styles";
+import { useEffect, useRef, useState } from "react";
 import AnthropicIcon from "../../assets/icons-empresa-svg/anthropic-icon";
 import AwsIcon from "../../assets/icons-empresa-svg/aws-icon";
 import FigmaIcon from "../../assets/icons-empresa-svg/buble-icon";
@@ -18,76 +18,87 @@ import ReactIcon from "../../assets/icons-empresa-svg/react-icon";
 import RenderIcon from "../../assets/icons-empresa-svg/render-icon";
 import RustIcon from "../../assets/icons-empresa-svg/rust-icon";
 import SurrealIcon from "../../assets/icons-empresa-svg/surrealDb-icon";
-import { useEffect, useRef } from "react";
+import {
+  BorderTop,
+  DivCarousel,
+  DivItens,
+  DivTitulo,
+  FadeOverlay,
+  IconesDiv,
+  MainContainer,
+  Track,
+} from "./styles";
 
-
-
-
-export function Carousel () {
-
-  const carouselRef = useRef(null);
-
+export function Carousel() {
   const icons = [
-    { id: 1, element: <AnthropicIcon />, alt: "Anthropic"},
-    { id: 2, element: <AwsIcon/>, alt: "ASW"},
-    { id: 3, element: <FigmaIcon/>, alt: "Figma"},
-    { id: 4, element: <FireBaseIcon/>, alt: "FireBase"},
-    { id: 5, element: <DockerIcon/>, alt: "Docker"},
-    { id: 6, element: <ExpoIcon/>, alt: "Expo"},
-    { id: 7, element: <GitHubIcon/>, alt: "GitHub"},
-    { id: 8, element: <JavaScriptIcon/>, alt: "JavaScript"},
-    { id: 9, element: <QdrantIcon/>, alt: "Qdrant"},
-    { id: 10, element: <MongoDbIcon/>, alt: "MongoDB"},
-    { id: 11, element: <OpenAiIcon/>, alt: "OpenAI"},
-    { id: 12, element: <PhytonIcon/>, alt: "Python"},
-    { id: 13, element: <PineConeIcon/>, alt: "PineCone"},
-    { id: 14, element: <PostgresIcon/>, alt: "Postgres"},
-    { id: 15, element: <PostManIcon/>, alt: "PostMan"},
-    { id: 16, element: <ReactIcon/>, alt: "React"},
-    { id: 17, element: <RenderIcon/>, alt: "Render"},
-    { id: 18, element: <RustIcon/>, alt: "Rust"},
-    { id: 19, element: <SurrealIcon/>, alt: "Surreal"},
+    { id: 1, element: <AnthropicIcon />, alt: "Anthropic" },
+    { id: 2, element: <AwsIcon />, alt: "AWS" },
+    { id: 3, element: <FigmaIcon />, alt: "Figma" },
+    { id: 4, element: <FireBaseIcon />, alt: "Firebase" },
+    { id: 5, element: <DockerIcon />, alt: "Docker" },
+    { id: 6, element: <ExpoIcon />, alt: "Expo" },
+    { id: 7, element: <GitHubIcon />, alt: "GitHub" },
+    { id: 8, element: <JavaScriptIcon />, alt: "JavaScript" },
+    { id: 9, element: <QdrantIcon />, alt: "Qdrant" },
+    { id: 10, element: <MongoDbIcon />, alt: "MongoDB" },
+    { id: 11, element: <OpenAiIcon />, alt: "OpenAI" },
+    { id: 12, element: <PhytonIcon />, alt: "Python" },
+    { id: 13, element: <PineConeIcon />, alt: "Pinecone" },
+    { id: 14, element: <PostgresIcon />, alt: "PostgreSQL" },
+    { id: 15, element: <PostManIcon />, alt: "Postman" },
+    { id: 16, element: <ReactIcon />, alt: "React" },
+    { id: 17, element: <RenderIcon />, alt: "Render" },
+    { id: 18, element: <RustIcon />, alt: "Rust" },
+    { id: 19, element: <SurrealIcon />, alt: "SurrealDB" },
   ];
 
-const loopIcons = [...icons, ...icons];
+  const loopIcons = [...icons, ...icons]; // duplicamos para efeito infinito
+  const trackRef = useRef(null);
+  const scrollSpeed = 1; // px por frame
 
-useEffect(() => {
-  const carousel = carouselRef.current;
-  if (!carousel) return;
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
 
-  let scrollStep = 0.5; // velocidade (quanto maior, mais rápido)
-  let animationFrameId;
+    let requestId;
+    const speed = 0.5; // pixels por frame
 
-  const scroll = () => {
-    carousel.scrollLeft += scrollStep;
+    const step = () => {
+      track.scrollLeft += speed;
 
-    // quando chega ao meio (metade duplicada), volta pro início
-    if (carousel.scrollLeft >= carousel.scrollWidth / 2) {
-      carousel.scrollLeft = 0;
-    }
+      // quando chegar na metade (porque duplicamos os ícones), reset para o início
+      if (track.scrollLeft >= track.scrollWidth / 2) {
+        track.scrollLeft = 0;
+      }
 
-    animationFrameId = requestAnimationFrame(scroll);
-  };
+      requestId = requestAnimationFrame(step);
+    };
 
-  animationFrameId = requestAnimationFrame(scroll);
+    requestId = requestAnimationFrame(step);
 
-  return () => cancelAnimationFrame(animationFrameId);
-}, []);
-
+    return () => cancelAnimationFrame(requestId);
+  }, []);
 
   return (
     <MainContainer>
-      <BorderTop/>
+      <BorderTop />
       <DivItens>
-      <DivTitulo>
-        <h2>Tecnologias que usamos</h2>
-      </DivTitulo>
-     <DivCarousel ref={carouselRef}>
-          {loopIcons.map((i, index) => (
-            <IconesDiv key={index}>{i.element}</IconesDiv>
-          ))}
+        <DivTitulo>
+          <h2>Tecnologias que usamos</h2>
+        </DivTitulo>
+
+        <DivCarousel>
+          <FadeOverlay $direction="left" />
+          <Track ref={trackRef}>
+            {loopIcons.map((i, index) => (
+              <IconesDiv key={index} aria-label={i.alt}>
+                {i.element}
+              </IconesDiv>
+            ))}
+          </Track>
+          <FadeOverlay $direction="right" />
         </DivCarousel>
       </DivItens>
     </MainContainer>
-  )
+  );
 }

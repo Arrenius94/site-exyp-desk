@@ -3,6 +3,9 @@ import {
   ContainerInputs,
   ContainerLeft,
   ContainerRight,
+  DivButton,
+  DivTextArea,
+  FormLinha,
   MainContainer,
   WidhtTopDivRight,
 } from "./styles";
@@ -34,17 +37,52 @@ export function Form() {
 
       <ContainerRight>
         <WidhtTopDivRight>
-          <div>
+          <FormLinha>
             <ContainerInputs>
               <label htmlFor="">Nome Completo</label>
               <input type="text" placeholder="Digite aqui..." />
             </ContainerInputs>
 
             <ContainerInputs>
-              <label htmlFor="">Nome Completo</label>
+              <label htmlFor="">Cargo</label>
               <input type="text" placeholder="Digite aqui..." />
             </ContainerInputs>
-          </div>
+          </FormLinha>
+
+          <FormLinha>
+            <ContainerInputs>
+              <label htmlFor="">Nome da empresa</label>
+              <input type="text" placeholder="Digite aqui..." />
+            </ContainerInputs>
+
+            <ContainerInputs>
+              <label htmlFor="">Mercado</label>
+              <input type="text" placeholder="Digite aqui..." />
+            </ContainerInputs>
+          </FormLinha>
+
+          <FormLinha>
+            <ContainerInputs>
+              <label htmlFor="">E-mail</label>
+              <input type="email" placeholder="Digite aqui..." />
+            </ContainerInputs>
+
+            <ContainerInputs>
+              <label htmlFor="">Telefone</label>
+              <input type="number" placeholder="Digite aqui..." />
+            </ContainerInputs>
+          </FormLinha>
+
+          <DivTextArea>
+            <textarea name="" rows={4} placeholder="Fale sobre o projeto..." id="">
+
+            </textarea>
+          </DivTextArea>
+
+         <DivButton>
+          <button>Enviar</button>  
+         </DivButton> 
+
         </WidhtTopDivRight>
       </ContainerRight>
     </MainContainer>

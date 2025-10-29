@@ -9,6 +9,7 @@ export const MainContainer = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  padding-bottom: ${pxParaVh(400)};
 `;
 export const BorderTop = styled.div`
   top: 0;
@@ -26,7 +27,7 @@ export const ContainerLeft = styled.div`
   text-align: left;
   justify-content: center;
   padding-top: ${pxParaVh(226)};
-  padding-left: ${pxParaVw(100)};
+  padding-left: ${pxParaVw(70)};
 
   & > h2 {
     text-align: left;
@@ -51,7 +52,7 @@ export const ContainerRight = styled.div`
   width: 55%;
   display: flex;
   flex-direction: column;
-  padding-right: ${pxParaVw(190)};
+  padding-right: ${pxParaVw(70)};
 `
 
 export const ContainerInputs = styled.div`
@@ -59,6 +60,7 @@ export const ContainerInputs = styled.div`
   flex-direction: column;
   
   & > label {
+    padding-left: ${pxParaClamp(16)};
     color: #fff;
     font-size: ${pxParaClamp(20)};
     font-weight: 700;
@@ -80,16 +82,16 @@ export const ContainerInputs = styled.div`
       color: #777;
     }
   }
-
 `
 
 export const WidhtTopDivRight = styled.div`
+padding-top: ${pxParaVh(90)};
 display: flex;
 flex-direction: column;
 align-items: center;
 justify-content: flex-start;
 gap: ${pxParaVh(18)};
-  height: ${pxParaVh(770)};
+height: ${pxParaVh(770)};
 `
 
 export const FormLinha = styled.div`
@@ -98,5 +100,63 @@ export const FormLinha = styled.div`
   justify-content: center;
   align-items: center;
   gap: ${pxParaVh(56)};
+`
+
+export const DivTextArea = styled.div `
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: ${pxParaVh(48)};
+
+ & > textarea {
+    border-radius: ${pxParaVw(8)};
+    border-style: none;
+    outline: none;
+    padding: ${pxParaVh(25, 575, 234, 16)};
+    background: #2D2D2D;
+    color: #fff;
+    font-size: ${pxParaClamp(20)};
+    font-weight: 700;
+    width: ${pxParaVw(816)};
+    height: ${pxParaVh(281)};
+    color: #fff;
+
+    &::placeholder{
+      color: #777;
+    }
+  }
+`
+
+export const DivButton = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding-top: ${pxParaVh(36)};
+
+  & > button {
+    width: ${pxParaVh(152)};
+    height: ${pxParaVw(64)};
+    border-radius: ${pxParaVw(6)};
+    background: #285EFE;
+    color: #fff;
+    font-size: ${pxParaClamp(20)};
+    font-weight: 700;
+     border: none;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    &:hover {
+      background: #1f4cd1;
+      transform: translateY(-2px);
+    }
+    &:active {
+      background: #1538a3;
+      transform: scale(0.97);
+    }
+
+  }
 `
 

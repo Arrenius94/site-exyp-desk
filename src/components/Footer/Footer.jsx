@@ -3,9 +3,11 @@ import {
   ContainerLinks,
   ContainerRight,
   ContentContainer,
+  DivBlueBar,
   DivLightBar,
   DivPadding,
   DivShadow,
+  DivShadowLines,
   IconeContainer,
   LightBar,
   LogoContainer,
@@ -16,6 +18,10 @@ import Twitter from "../../assets/icons-png/logo-twitter.png";
 import Instagram from "../../assets/icons-png/logo-instagram.png";
 import FaceBook from "../../assets/icons-png/logo-facebook.png";
 import Linkdln from "../../assets/icons-png/logo-linkedln.png";
+import BarBlueblur from "../../assets/icons/blurbarsvg";
+import SombraAzul from "../../assets/icons/blurbarsvg";
+
+
 
 export function Footer() {
   return (
@@ -64,7 +70,13 @@ export function Footer() {
         </ContentContainer>
 
         <DivLightBar>
+          <DivBlueBar />
           <LightBar />
+
+          <DivShadowLines>
+            <SombraAzul />
+          </DivShadowLines>
+
           <DivShadow />
         </DivLightBar>
       </DivPadding>

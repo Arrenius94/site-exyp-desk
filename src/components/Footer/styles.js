@@ -118,21 +118,49 @@ height: ${pxParaVh(286)};
 }
 `
 
-export const LightBar = styled.div`
-  width: ${pxParaVw(1740)};
-  height: ${pxParaVh(2)};
-  background-color: #fff;
+export const DivBlueBar = styled.div`
+  position: absolute;
+  width: ${pxParaVw(1745)};
+  height: ${pxParaVh(8)};
+  border-radius: ${pxParaVw(8)};
+  background-color: #285EFE;
   z-index: 2;
+
+    & > svg {
+    filter: blur(${pxParaVw(5)});
+  }
+`;
+
+export const LightBar = styled.div`
+ position: absolute;
+width: ${pxParaVw(1740)};
+height: ${pxParaVh(2)};
+border-radius: ${pxParaVw(2)};
+background-color: #fff;
+z-index: 3;
 `
 
 export const DivLightBar = styled.div`
 width: 100%;
- position: absolute;
+ position: relative;
  display: flex;
  justify-content: center;
  align-items: center;
  bottom: 5%;
 `
+
+// export const DivBlurBar = styled.div`
+//   position: absolute;
+//   width: ${pxParaVw(1745)};
+//   height: ${pxParaVh(8)};
+//   border-radius: ${pxParaVw(8)};
+//   z-index: 0;
+
+//   & > svg {
+//     filter: blur(${pxParaVw(5)});
+//   }
+
+// `
 
 export const DivShadow = styled.div`
   position: absolute;
@@ -141,4 +169,18 @@ export const DivShadow = styled.div`
   width: ${pxParaVw(1920)};
   height: ${pxParaVh(55)};
   filter: blur(${pxParaVw(150)});
+`
+
+export const DivShadowLines = styled.div`
+  position: absolute;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+
+  & > svg {
+    width: ${pxParaVw(1770)};
+    min-height: ${pxParaVh(40)};
+  }
 `

@@ -12,9 +12,15 @@ import {
 } from "./styles";
 
 import emailjs from '@emailjs/browser';
-const templateId = "template_g5lg1mh";
-const serviceId = "service_u91ag4x";
-const publicKey = "2JNGkcP-Ki9-WYxdd";
+
+const SERVICE_ID = (import.meta.env.VITE_SERVICE_ID || '').trim();
+const TEMPLATE_ID = (import.meta.env.VITE_TEMPLATE_ID || '').trim();
+const PUBLIC_KEY  = (import.meta.env.VITE_PUBLIC_KEY || '').trim();
+
+// Inicializa o EmailJS uma vez
+if (PUBLIC_KEY) {
+  emailjs.init({ publicKey: PUBLIC_KEY });
+}
 
 export function Form() {
   const [name, setName] = useState("");
@@ -22,10 +28,39 @@ export function Form() {
   const [company, setCompany] = useState("");
   const [industry, setIndustry] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState(""); // You can apply formatting later
+  const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
 
- 
+function formatTelefoneBR(input = "") {
+  const digits = String(input).replace(/\D/g, "");
+
+  // remove código do país se presente
+  let n = digits;
+  if (n.startsWith("55") && n.length > 11) n = n.slice(2);
+
+  const startsWithZero = n.startsWith("0");    
+  const maxLen = startsWithZero ? 12 : 11;        
+  const d = n.slice(0, maxLen);
+  if (!d) return "";
+
+  const dddLen = startsWithZero ? 3 : 2;
+  const ddd = d.slice(0, dddLen);
+  const rest = d.slice(dddLen);
+
+  // digitação progressiva
+  if (d.length <= dddLen) return `(${ddd})`;
+  if (rest.length <= 4) return `(${ddd}) ${rest}`;
+
+  // 8 dígitos (fixo): XXXX-XXXX
+  if (rest.length === 8) return `(${ddd}) ${rest.slice(0, 4)}-${rest.slice(4)}`;
+
+  // 9 dígitos (móvel): 9XXXX-XXXX
+  if (rest.length >= 9) return `(${ddd}) ${rest.slice(0, 5)}-${rest.slice(5, 9)}`;
+
+  // 5–7 dígitos (parcial)
+  return `(${ddd}) ${rest.slice(0, rest.length - 4)}-${rest.slice(-4)}`;
+}
+
   const resetInputs = () => {
     setName('');
     setCargo('');
@@ -36,13 +71,17 @@ export function Form() {
     setMessage('');
   }
 
-
   const handleSubmit = async () => {
+    if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
+      console.error('EmailJS config ausente', { SERVICE_ID, TEMPLATE_ID, PUBLIC_KEY });
+      alert('Falha na configuração de e-mail. Tente mais tarde.');
+      return;
+    }
 
     try {
       await emailjs.send(
-        templateId,
-        serviceId,
+        SERVICE_ID,   // service_id primeiro
+        TEMPLATE_ID,  // template_id depois
         {
           full_name: name,
           role: cargo,
@@ -51,14 +90,13 @@ export function Form() {
           email: email,
           phone: phone,
           message: message,
-        },
-        { publicKey: publicKey }
+        }
       );
       alert('Mensagem enviada com sucesso!');
       resetInputs();
     } catch (err) {
-      console.error(err);
-      alert('Falha ao enviar. Tente novamente.');
+      console.error('Erro EmailJS:', err);
+      alert(err?.text || 'Falha ao enviar. Tente novamente.');
     }
   };
 
@@ -120,20 +158,22 @@ export function Form() {
 
             <ContainerInputs>
               <label htmlFor="">Telefone</label>
-              <input type="number" onChange={(e) => setPhone(e.target.value)} value={phone} placeholder="Digite aqui..." />
+              <input onChange={(e) => setPhone(formatTelefoneBR(e.target.value))} value={phone} placeholder="Digite aqui..." />
             </ContainerInputs>
           </FormLinha>
 
           <DivTextArea>
-            <textarea name="" onChange={(e) => setMessage(e.target.value)} value={message} rows={4} placeholder="Fale sobre o projeto..." id="">
-
-            </textarea>
+            <textarea
+              onChange={(e) => setMessage(e.target.value)}
+              value={message}
+              rows={4}
+              placeholder="Fale sobre o projeto..."
+            />
           </DivTextArea>
 
-         <DivButton onClick={() => handleSubmit()}>
-          <button>Enviar</button>  
-         </DivButton> 
-
+          <DivButton onClick={handleSubmit}>
+            <button>Enviar</button>
+          </DivButton>
         </WidhtTopDivRight>
       </ContainerRight>
     </MainContainer>
